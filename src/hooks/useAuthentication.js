@@ -1,3 +1,4 @@
+import {db} from "../firebase/config"
 
 import{
     getAuth, createUserWithEmailAndPassword,
@@ -13,7 +14,7 @@ export const useAuthentication= () =>{
     const [loading, setLoading] = useState(null)
 
     // cleanup - useState que irá cancelar as açoes futuras do componente. O objetivo é nao ter problemas com leak de memoria
-    const [cancelled, setcancelled]=useState(false)
+    const [cancelled, setCancelled]=useState(false)
 
     //Pegando autenticações do firebase e criando funções de autenticaçao
     const auth=getAuth()
@@ -30,6 +31,7 @@ export const useAuthentication= () =>{
         checkIfIsCancelled()
 
         setLoading(true)
+        setError(null)
 
         try {
 
@@ -42,27 +44,30 @@ export const useAuthentication= () =>{
             await updateProfile(user,{
                 displayName:data.displayName
             })
+            setLoading(false)
 
             return user
         }catch(error){
             console.log(error.message)
             console.log(typeof error.message)
 
-                let systemErrorMessage
-                if(error.message.includes("Password")){
-                    systemErrorMessage = "A senha precisa conter pelo menos 6 caracteres"
-                }else if (error.message.includes("email-already")){
-                    systemErrorMessage="E-mail ja cadastrado."
-                }else{
-                    systemErrorMessage= "Ocorreu um erro, por favor tente mais tarde"
-                }
+            let systemErrorMessage
+            if(error.message.includes("Password")){
+                systemErrorMessage = "A senha precisa conter pelo menos 6 caracteres"
+            }else if (error.message.includes("email-already")){
+                systemErrorMessage="E-mail ja cadastrado."
+            }else{
+                systemErrorMessage= "Ocorreu um erro, por favor tente mais tarde"
+            }
+            setLoading(false)
+            setError(systemErrorMessage)
         }
-        setLoading(false)
+        
     }
 
     //Esse useEffect tem a função de evitar o memory leak
     useEffect(()=>{
-        return() => setcancelled(true)
+        return() => setCancelled(true)
     },[])
 
     return{

@@ -12,17 +12,17 @@ const Register = () => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
-  const [createUser, authError, loading] = useAuthentication()
+  const {createUser, error:authError, loading} = useAuthentication()
 
   //States de status
-  const [error, setError] = useState("")
+  const [errorFront, setErrorFront] = useState("")
 
   //Evento de envio do formulario
   const handleSubmit = async (e) =>{
     e.preventDefault()
 
     //Limpando o formulario apos o envio
-    setError("")
+    setErrorFront("")
 
     //Formando o usuário com base nos inputs
     const user={
@@ -33,13 +33,20 @@ const Register = () => {
 
     //Validações do formulario
     if (password !== confirmPassword){
-      setError("As senhas precisam ser iguais!")
+      setErrorFront("As senhas precisam ser iguais!")
       return
     }
 
     const res = await createUser(user)
-    console.log(user)
+    console.log(res)
   }
+
+  useEffect(()=>{
+    if(authError){
+      setErrorFront(authError)
+    }
+
+  },[authError])
 
   return (
     <div className={styles.register}>
@@ -85,9 +92,13 @@ const Register = () => {
             onChange={(e)=>setConfirmPassword(e.target.value)}
             />
         </label>
-        <button className='btn'>Cadastrar</button>
+        {/*Inserindo a função loading */}
+        {!loading && <button className='btn'>Cadastrar</button>}
+        {/*Condicionando a ativação do botao à função loading */}
+        {loading && <button className='btn'disable>Aguarde...</button>}
+        
          {/*Exibindo o erro no console.log */}
-        {error && <p className='error'>{error}</p>}
+        {errorFront && <p className='error'>{errorFront}</p>}
       </form>
     </div>
   )
