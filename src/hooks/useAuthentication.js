@@ -72,6 +72,25 @@ export const useAuthentication= () =>{
         signOut(auth)
     }
 
+    //Login
+
+    const login = async(data)=>{
+        checkIfIsCancelled()
+        setLoading(true)
+        setError(false)
+        
+        try{
+            await signInWithEmailAndPassword(auth, data.email, data.password)
+            setLoading(false)
+        }catch (error){
+            let systemErrorMessage;
+                systemErrorMessage = "Usuário ou senha inválido. Por favor tente novamente."
+            
+            setError(systemErrorMessage)
+            setLoading(false)
+        }
+    }
+
     //Esse useEffect tem a função de evitar o memory leak
     useEffect(()=>{
         return() => setCancelled(true)
@@ -82,7 +101,8 @@ export const useAuthentication= () =>{
         createUser,
         error,
         loading,
-        logout
+        logout,
+        login,
     }
 
 

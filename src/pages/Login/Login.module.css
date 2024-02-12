@@ -1,1 +1,7 @@
 /*Estilo do formulario de login*/
+.login{
+    text-align: center;
+}
+.login p{
+    color:#aaa ;
+}
