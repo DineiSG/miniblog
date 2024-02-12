@@ -12,8 +12,8 @@ import styles from './Navbar.module.css'
 
 
 const Navbar = () => {
-    const {user} = useAuthValue()
-
+    const user = useAuthValue()
+    const {logout} =useAuthentication()
 
   return (
    <nav className={styles.navbar}>
@@ -41,6 +41,7 @@ const Navbar = () => {
                 </li>
             </>
         )}
+        {/*Se tiver usuario logado esses links aparecerao */}
         {user &&(
               <>
               <li>
@@ -60,6 +61,12 @@ const Navbar = () => {
                 Sobre
             </NavLink>
         </li>
+        {/*Caso o usuario esteja logado irá aparecer o botao de Sair */}
+        {user &&(
+            <li>
+                <button onClick={logout}>Sair</button>
+            </li>
+        )}
     </ul>
    </nav>
   )
