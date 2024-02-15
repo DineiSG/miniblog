@@ -55,7 +55,7 @@ function App() {
       <div className='container'>
         <Routes>
           {/*Criando as rotas das páginas */}
-          <Route path="/home" element={<Home/>}></Route>
+          <Route path="/" element={<Home/>}></Route>
           <Route path='/about' element={<About/>}></Route>
           {/*Bloqueando a rota de um usuario nao logado e redirecionando para a home*/}
           <Route path="/login" element={!user ? <Login/>:<Navigate to="/"/>}></Route>

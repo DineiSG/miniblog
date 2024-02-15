@@ -1,7 +1,8 @@
 import styles from './CreatePost.module.css'
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuthValue } from '../../context/AuthContext'
+import { useInsertDocument } from '../../hooks/useInsertDocument'
 
 
 const CreatePost = () => {
@@ -11,8 +12,49 @@ const CreatePost = () => {
   const [tags, setTags] = useState([])
   const [formError, setFormError] = useState("")
 
+  const user =useAuthValue()
+  const navigate = useNavigate()
+  const {insertDocument, response} = useInsertDocument("posts")
+  
+
   const handleSubmit = (e)=>{
     e.preventDefault()
+    setFormError("")
+    
+    //validar url da imagem
+    try{
+      new URL(image) 
+    }catch{
+      setFormError("A imagem precisa ser uma URL")
+      return
+    }
+
+    //criar o array de tags
+    const tagsArray = tags.split(",").map((tag)=>tag.trim().toLowerCase())
+    
+    //checar todos os valores
+    if(!title || !image || !tags || !body){
+      setFormError("Por favor preencha todos os campos")
+      return
+    }
+
+    if(formError){
+      return
+    } 
+
+    insertDocument({
+      title, 
+      image,
+      body,
+      tagsArray,
+      uid:user.uid,
+      createdBy: user.displayName,
+    })
+
+    //Redirect home
+    navigate("/")
+    
+
   }
 
   return (
@@ -24,8 +66,7 @@ const CreatePost = () => {
           <span>Título:</span>
           <input type="text"
           name="title"
-          required
-          placehokder="Pense em um bom título..."
+          placeholder="Pense em um bom título..."
           onChange={(e)=>setTitle(e.target.value)}
           value={title} />
         </label>
@@ -33,8 +74,7 @@ const CreatePost = () => {
           <span>URL da Imagem:</span>
           <input type="text"
           name="image"
-          required
-          placehokder="Insira uma imagem que representa o seu post."
+          placeholder="Insira uma imagem que representa o seu post."
           onChange={(e)=>setImage(e.target.value)}
           value={image} />
         </label>
@@ -42,7 +82,6 @@ const CreatePost = () => {
           <span>Conteúdo:</span>
           <textarea
           name="body"
-          required
           placeholder='Insira o conteúdo do post'
           onChange={(e)=>setBody(e.target.value)}
           value={body}/>
@@ -51,19 +90,15 @@ const CreatePost = () => {
           <span>Tags:</span>
           <input type="text"
           name="tags"
-          required
           placehokder="Insira as tags separadas por virgulas"
           onChange={(e)=>setTags(e.target.value)}
           value={tags} />
         </label>
-        <button className='btn'>Cadastrar</button>
        
-        {/*{!loading && <button className='btn'>Cadastrar</button>}
-        
-        {loading && <button className='btn'disable>Aguarde...</button>}
-        
-         
-        {errorFront && <p className='error'>{errorFront}</p>}*/ }
+        {!response.loading && <button className='btn'>Cadastrar</button>}
+        {response.loading && <button className='btn'disable>Aguarde...</button>}
+        {formError && <p className='error'>{formError} </p>}
+        {response.error && <p className='error'>{response.error}</p>}
       </form>
     </div>
   )
