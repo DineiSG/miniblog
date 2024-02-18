@@ -1,5 +1,4 @@
-import {db} from "../firebase/config"
-
+//Hook para a criação e autenticação de usuario
 import{
     getAuth, createUserWithEmailAndPassword,
     signInWithEmailAndPassword,

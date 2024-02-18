@@ -1,3 +1,5 @@
+//Hook para busca e visualização do posts
+
 import { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 
@@ -31,24 +33,13 @@ export const useFetchDocuments = (docCollection, search=null, uid=null)=>{
             try{
                 let q
 
+                //Criando a busca de dados ordenados pela data de criação mais recente
                 if (search){
-                    q = await query(
-                        collectionRef,
-                        where("tags", "array-contains", search),
-                        orderBy("createdAt", "desc")
-                    )
-                }else if(uid){
-                    q = await query(
-                        collectionRef,
-                        where("uid", "==", uid),
-                        orderBy("createdAt", "desc")
-                    )
+                    q = await query(collectionRef,where("tagsArray", "array-contains", search), orderBy("createdAt", "desc"))
+                        
                 }else{
-                    //Criando a busca de dados ordenados pela data de criação mais recente
-                    q=await query(collectionRef, orderBy("createdAt", "desc"))
-                }
-                    
-                
+                    q = await query (collectionRef, orderBy("createdAt", "desc"))
+                }   
 
                 //Função para mapear um dado alterado.
                 await onSnapshot(q, (querySnapshot)=>{

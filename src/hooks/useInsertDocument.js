@@ -1,3 +1,5 @@
+//Hook para criação de posts 
+
 import { useState, useEffect, useReducer } from "react";
 
 //Importando o banco de dados do Firebase

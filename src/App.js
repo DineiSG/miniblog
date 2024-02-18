@@ -13,7 +13,7 @@ import About from './pages/About/About';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register';
-
+import Search from './pages/Search/Search';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -57,11 +57,11 @@ function App() {
           {/*Criando as rotas das páginas */}
           <Route path="/" element={<Home/>}></Route>
           <Route path='/about' element={<About/>}></Route>
+          <Route path='/search' element={<Search/>}></Route>
           {/*Bloqueando a rota de um usuario nao logado e redirecionando para a home*/}
           <Route path="/login" element={!user ? <Login/>:<Navigate to="/"/>}></Route>
           {/*Bloqueando rota de um usuario nao registrado e redirecionadio para a home */}
           <Route path='/register' element={!user ? <Register/>:<Navigate to="/"/>}></Route>
-
           <Route path='/dashboard' element={user ? <Dashboard/>:<Navigate to="/login"/>}></Route>
           <Route path='/posts/create'element={user ? <CreatePost/>:<Navigate to="/login"/>}></Route>
         </Routes>
