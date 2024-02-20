@@ -22,6 +22,7 @@ import { useState, useEffect } from 'react';
 import { useAuthentication } from './hooks/useAuthentication';
 import Dashboard from './pages/Dashboards/Dashboard';
 import CreatePost from './pages/CreatePost/CreatePost';
+import Post from './pages/Post/Post';
 
 
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/" element={<Home/>}></Route>
           <Route path='/about' element={<About/>}></Route>
           <Route path='/search' element={<Search/>}></Route>
+          <Route path='/posts/:id' element={<Post/>}></Route>
           {/*Bloqueando a rota de um usuario nao logado e redirecionando para a home*/}
           <Route path="/login" element={!user ? <Login/>:<Navigate to="/"/>}></Route>
           {/*Bloqueando rota de um usuario nao registrado e redirecionadio para a home */}
