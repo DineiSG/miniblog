@@ -37,9 +37,12 @@ export const useFetchDocuments = (docCollection, search=null, uid=null)=>{
                 if (search){
                     q = await query(collectionRef,where("tagsArray", "array-contains", search), orderBy("createdAt", "desc"))
                         
+                }else if(uid){ //Buscando o usuário pelo uid
+                    q = await query(collectionRef,where("uid", "==", uid), orderBy("createdAt", "desc"))
+
                 }else{
                     q = await query (collectionRef, orderBy("createdAt", "desc"))
-                }   
+                }
 
                 //Função para mapear um dado alterado.
                 await onSnapshot(q, (querySnapshot)=>{
@@ -67,5 +70,5 @@ export const useFetchDocuments = (docCollection, search=null, uid=null)=>{
         return() => setCancelled(true)
     },[])
 
-    return {documents, loading, error}
+    return { loading, error}
 }
