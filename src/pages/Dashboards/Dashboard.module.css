@@ -9,8 +9,9 @@
     margin-bottom: 0.5em;
 }
 .dashboard p{
-    color:#aaa;
+    color:#060505;
     margin-bottom: 1em;
+    font-weight: bold;
 }
 .noposts{
     text-align: center;

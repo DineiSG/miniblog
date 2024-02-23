@@ -7,8 +7,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 //Importando o context do provedor
 import { AuthProvider } from './context/AuthContext';
 
-//Importando as páginas e componentes
+//Importando o estilo
 import './App.css';
+
+//Importando as páginas e componentes
 import About from './pages/About/About';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login'
@@ -16,13 +18,16 @@ import Register from './pages/Register/Register';
 import Search from './pages/Search/Search';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Dashboard from './pages/Dashboards/Dashboard';
+import CreatePost from './pages/CreatePost/CreatePost';
+import Post from './pages/Post/Post';
+import EditPost from './pages/EditPost/EditPost';
+
 
 //importando os hooks
 import { useState, useEffect } from 'react';
 import { useAuthentication } from './hooks/useAuthentication';
-import Dashboard from './pages/Dashboards/Dashboard';
-import CreatePost from './pages/CreatePost/CreatePost';
-import Post from './pages/Post/Post';
+
 
 
 
@@ -62,9 +67,10 @@ function App() {
           <Route path='/posts/:id' element={<Post/>}></Route>
           {/*Bloqueando a rota de um usuario nao logado e redirecionando para a home*/}
           <Route path="/login" element={!user ? <Login/>:<Navigate to="/"/>}></Route>
-          {/*Bloqueando rota de um usuario nao registrado e redirecionadio para a home */}
           <Route path='/register' element={!user ? <Register/>:<Navigate to="/"/>}></Route>
+          {/*Bloqueando rota de um usuario nao registrado e redirecionadio para o login */}
           <Route path='/dashboard' element={user ? <Dashboard/>:<Navigate to="/login"/>}></Route>
+          <Route path='/posts/edit/:id'element={user ? <EditPost/>:<Navigate to="/login"/>}></Route>
           <Route path='/posts/create'element={user ? <CreatePost/>:<Navigate to="/login"/>}></Route>
         </Routes>
       </div>
